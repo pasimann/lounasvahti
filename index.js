@@ -6,6 +6,8 @@ const express = require('express')
 const { CronJob } = require('cron')
 const { WebClient } = require('@slack/client')
 
+console.log(process.env)
+
 const EDIBLES_REGEX = [
   /pi(ts|zz)a/i,
   /itse\s?tehty/i,
@@ -61,7 +63,7 @@ function filterEdibles (menu) {
 function postEdiblesToSlack (edibles) {
   return new Promise((resolve, reject) => {
     const courses = edibles.map(edible => edible.title_fi).join('\n')
-    const message = `Alakerrassa seuraavaa:\n\n${courses}`
+    const message = `Valtakunnan johtaja Siitoin suosittelee:\n\n${courses}`
     slack.chat.postMessage('lounascuckold', message, { as_user: 'pekka' }, (err) => {
       return err ? reject(err) : resolve(message)
     })
