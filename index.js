@@ -19,7 +19,7 @@ const slack = new WebClient(process.env.SLACK_API_TOKEN)
 
 let job = null
 try {
-  job = new CronJob(process.env.CRON_PATTERN, () => {
+  job = new CronJob('30 8 * * 1-5', () => {
     return getMenu(new Date())
       .then(filterEdibles)
       .then(postEdiblesToSlack)
