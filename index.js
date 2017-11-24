@@ -61,7 +61,9 @@ function filterEdibles (menu) {
 function postEdiblesToSlack (edibles) {
   return new Promise((resolve, reject) => {
     const courses = edibles.map(edible => edible.title_fi).join('\n')
-    const message = `Valtakunnan johtaja Siitoin suosittelee:\n\n${courses}`
+    let message = courses.length > 0
+      ? `Valtakunnan johtaja Siitoin suosittelee:\n\n${courses}`
+      : `Saatana elää ja voi hyvin.`
     slack.chat.postMessage('lounascuckold', message, { as_user: 'pekka' }, (err) => {
       return err ? reject(err) : resolve(message)
     })
