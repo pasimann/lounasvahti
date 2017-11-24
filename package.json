@@ -1,0 +1,21 @@
+{
+  "name": "lounasvahti",
+  "scripts": {
+    "start": "node index.js",
+    "precommit": "standard"
+  },
+  "engines": {
+    "node": "6.x"
+  },
+  "devDependencies": {
+    "husky": "0.14.3",
+    "standard": "10.0.3"
+  },
+  "dependencies": {
+    "@slack/client": "3.14.2",
+    "cron": "1.3.0",
+    "dotenv": "4.0.0",
+    "isomorphic-fetch": "2.2.1",
+    "moment": "2.19.2"
+  }
+}
