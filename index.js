@@ -19,7 +19,7 @@ try {
     getMenu(new Date())
       .then((menu) => {
         return new Promise((resolve, reject) => {
-          slack.chat.postMessage('tanelih', 'terve', { as_user: 'pekka' }, (err) => {
+          slack.chat.postMessage('bot-playground', 'testi', { as_user: 'pekka' }, (err) => {
             if (err) {
               return reject(err)
             }
