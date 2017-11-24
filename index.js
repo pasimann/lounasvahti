@@ -6,8 +6,6 @@ const express = require('express')
 const { CronJob } = require('cron')
 const { WebClient } = require('@slack/client')
 
-console.log(process.env)
-
 const EDIBLES_REGEX = [
   /pi(ts|zz)a/i,
   /itse\s?tehty/i,
