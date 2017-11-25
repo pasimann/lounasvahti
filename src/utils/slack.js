@@ -11,10 +11,10 @@ module.exports.startRTM = function startRTM () {
 }
 
 module.exports.postMessage = function postMessage (message) {
-  const as_user = process.env.SLACK_USER
+  const user = process.env.SLACK_USER
   const channel = process.env.SLACK_TARGET_CHANNEL
   return new Promise((resolve, reject) => {
-    slack.chat.postMessage(channel, message, { as_user }, err => err ? reject(err) : resolve())
+    client.chat.postMessage(channel, message, { as_user: user }, err => err ? reject(err) : resolve())
   })
 }
 
