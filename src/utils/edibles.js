@@ -24,7 +24,7 @@ module.exports.getEdibleReply = function getEdibleReply (date) {
       })
       .then((edibles) => {
         if (edibles.length > 0) {
-          return `Valtakunnan johtaja Siitoin suosittelee:\n\n${edibles.join('\n')}`
+          return `Valtakunnanjohtaja Siitoin suosittelee:\n\n${edibles.join('\n')}`
         }
         return fetchRandomPekkaQuote()
       })
