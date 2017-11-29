@@ -33,7 +33,7 @@ module.exports.getEdibleReply = function getEdibleReply (date) {
 }
 
 function fetchRandomPekkaQuote () {
-  const s = moment().second();
+  const s = moment().second()
   if (s % 2 === 0) {
     return Promise.resolve('Saatana elää ja voi hyvin.')
   }
