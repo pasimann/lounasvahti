@@ -11,7 +11,8 @@ startRTM()
     log.info('Slack RTM started...')
     onMessage((rtm, message) => {
       const date = new Date()
-      if (/(louna(s|ana|aksi)|ruo(ka|aksi|kana))/i.test(message.text)) {
+      if (/(louna(s|ana|aksi)|ruo(ka|aksi|kana)|mestar(i|in|ille))/i
+          .test(message.text)) {
         log.info('Replying to message...')
         if (/huomen/i.test(message.text)) {
           date.setDate(date.getDate() + 1)

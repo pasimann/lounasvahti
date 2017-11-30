@@ -33,5 +33,20 @@ module.exports.getEdibleReply = function getEdibleReply (date) {
 }
 
 function fetchRandomPekkaQuote () {
-  return Promise.resolve('Saatana elää ja voi hyvin.')
+  const s = moment().second()
+  if (s % 2 === 0) {
+    return Promise.resolve('Saatana elää ja voi hyvin.')
+  }
+  if (s % 3 === 0) {
+    return Promise.resolve('Mmmm, mutta kaikesta huolimatta. Olen kivenkova rasisti, sadisti ja fasisti. Siitä minä nautin!')
+  }
+  if (s % 5 === 0) {
+    return Promise.resolve('En missään tapauksessa ole mikään natsipelle, vaikka näin kommunistit väittääkin.')
+  }
+  if (s % 7 === 0) {
+    return Promise.resolve('Magnumit on täällä aina valmiina.')
+  }
+  if (s % 11 === 0) {
+    return Promise.resolve('Irstailija olen kyllä. Olen perverssi. Äitini toivoi minusta teologia, mutta minusta tulikin rivologi.')
+  }
 }
