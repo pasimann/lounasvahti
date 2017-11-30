@@ -1,6 +1,6 @@
 const { CronJob } = require('cron')
 
-const CRON_PATTERN = '30 8 * * 1-5'
+const CRON_PATTERN = '30 7 * * 1-5'
 
 module.exports.createCronJob = function createCronJob (onTick) {
   return new Promise((resolve, reject) => {
