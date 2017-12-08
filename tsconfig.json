@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "outDir": "target",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "lounasvahti/*": ["src/*"]
+    },
+    "sourceMap": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
+}
