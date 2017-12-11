@@ -5,7 +5,8 @@ const EDIBLES_REGEX = [
   /itse\s?tehty/i,
   /wien\w*\s*(leike|leikkeet)?/i,
   /kiev\w*\s*kana/i,
-  /porsaan(leike|leikkeit)/i
+  /porsaan(leike|leikkeit)/i,
+  /jauhelihapihv(i|ej)/i
 ]
 
 module.exports.getEdibleReply = function getEdibleReply (date) {
