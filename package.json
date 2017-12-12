@@ -17,6 +17,7 @@
     "@types/node": "8.0.53",
     "@types/winston": "2.3.7",
     "jest": "21.2.1",
+    "nodemon": "1.12.1",
     "ts-jest": "21.2.3",
     "tslint": "5.8.0",
     "tslint-config-standard": "7.0.0",
@@ -29,7 +30,6 @@
     "dotenv": "4.0.0",
     "module-alias": "2.0.2",
     "moment": "2.19.3",
-    "nodemon": "1.12.1",
     "source-map-support": "0.5.0",
     "winston": "2.4.0"
   },
