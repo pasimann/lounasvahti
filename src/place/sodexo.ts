@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 import * as moment from 'moment'
 
@@ -6,6 +5,8 @@ import { Place } from 'lounasvahti/place'
 
 export class Sodexo extends Place {
   private static BASE_URL = 'https://www.sodexo.fi/ruokalistat/output/daily_json/66'
+
+  public header: string = 'Alakerrassa tarjolla:'
 
   public menu (date: Date): Promise<string[]> {
     if (moment(date).isValid()) {

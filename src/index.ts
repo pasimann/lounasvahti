@@ -18,13 +18,26 @@ const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
   token: process.env.SLACK_API_TOKEN
 }
 
+const RE_TOMORROW = /huomen/i
+const RE_SHOULD_REPLY = /(louna(s|ana|aksi)|ruo(ka|aksi|kana))/i
+
 const slack = new SlackClient(SLACK_CLIENT_OPTIONS)
+
+const places: Place[] = [
+  new Sodexo()
+]
 
 slack.initialize()
   .then(() => {
     slack.on(SlackClient.MESSAGE, (message: SlackMessage) => {
-      log.info(message.content)
-
+      if (RE_SHOULD_REPLY.test(message.content)) {
+        const date = new Date()
+        if (RE_TOMORROW.test(message.content)) {
+          date.setDate(date.getDate() + 1)
+        }
+        Promise.all(places.map(p => display(date, p)))
+          .catch(err => log.error(err.message, err.stack))
+      }
     })
   })
   .then(() => {
@@ -36,11 +49,12 @@ slack.initialize()
   })
 
 function onCronTick (date: Date): void {
-  const place: Place = new Sodexo()
-  place.menu(date)
-    .then((menu: string[]) => {
-      log.info('Fetched Sodexo menu:', menu)
-      slack.post(menu.join('\n'))
-    })
+  Promise.all(places.map(p => display(date, p)))
     .catch((err: Error) => log.error(err.message, err.stack))
+}
+
+function display (date: Date, place: Place): Promise<void> {
+  return place.menu(date).then((menu: string[]) => {
+    return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`)
+  })
 }
