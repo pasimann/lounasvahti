@@ -10,7 +10,7 @@ import { SlackClient, SlackClientOptions, SlackMessage } from 'lounasvahti/slack
 import { Place } from 'lounasvahti/place'
 import { Sodexo } from 'lounasvahti/place/sodexo'
 
-const CRON_PATTERN = '* * * * *'
+const CRON_PATTERN = '30 7 * * 1-5'
 
 const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
   user: process.env.SLACK_USER,
