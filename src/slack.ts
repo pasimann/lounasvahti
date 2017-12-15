@@ -27,6 +27,7 @@ export class SlackMessage {
 export class SlackClient extends EventEmitter {
   public static MESSAGE: string = 'message'
 
+  private id: string
   private options: SlackClientOptions
 
   private webClient: WebClient
@@ -43,9 +44,14 @@ export class SlackClient extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.rtmClient.start()
       this.rtmClient.on(RTM_EVENTS.MESSAGE, (message) => {
-        this.emit(SlackClient.MESSAGE, new SlackMessage(this.rtmClient, message))
+        if (message.user !== this.id) {
+          this.emit(SlackClient.MESSAGE, new SlackMessage(this.rtmClient, message))
+        }
       })
-      this.rtmClient.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => resolve())
+      this.rtmClient.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (auth) => {
+        this.id = auth.self.id
+        resolve()
+      })
       this.rtmClient.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, err => reject(err))
     })
   }
