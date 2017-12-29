@@ -9,14 +9,11 @@ export class Sodexo extends Place {
   public header: string = 'Valtakunnanjohtaja Siitoin suosittelee:'
 
   public menu (date: Date): Promise<string[]> {
-    if (moment(date).isValid()) {
-      const y = moment(date).get('year')
-      const d = moment(date).get('date')
-      const m = moment(date).get('month') + 1
-      return Promise.resolve(axios.get(`${Sodexo.BASE_URL}/${y}/${m}/${d}/fi`)).then((response) => {
-        return response.data.courses.map(course => course.title_fi)
-      })
-    }
-    return Promise.reject(new Error('Invalid Date!'))
+    const y = moment(date).get('year')
+    const d = moment(date).get('date')
+    const m = moment(date).get('month') + 1
+    return Promise.resolve(axios.get(`${Sodexo.BASE_URL}/${y}/${m}/${d}/fi`)).then((response) => {
+      return response.data.courses.map(course => course.title_fi)
+    })
   }
 }

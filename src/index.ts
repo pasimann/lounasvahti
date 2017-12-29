@@ -9,6 +9,7 @@ import { SlackClient, SlackClientOptions, SlackMessage } from 'lounasvahti/slack
 
 import { Place } from 'lounasvahti/place'
 import { Sodexo } from 'lounasvahti/place/sodexo'
+import { Shalimar } from 'lounasvahti/place/shalimar'
 
 const CRON_PATTERN = '30 7 * * 1-5'
 
@@ -24,7 +25,8 @@ const RE_SHOULD_REPLY = /(louna(s|ana|aksi)|ruo(ka|aksi|kana))/i
 const slack = new SlackClient(SLACK_CLIENT_OPTIONS)
 
 const places: Place[] = [
-  new Sodexo()
+  new Sodexo(),
+  new Shalimar()
 ]
 
 slack.initialize()
