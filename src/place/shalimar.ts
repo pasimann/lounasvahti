@@ -30,9 +30,7 @@ export class Shalimar extends Place {
             if ($(el).find('td').hasClass('dish')) {
               const dish = $(el).find('td').first().text()
               const desc = $(el).next().find('td.desc').text()
-              return desc !== null
-                ? menu.concat(`${dish} - ${desc}`)
-                : menu.concat(dish)
+              return menu.concat(`${dish} - ${desc}`)
             }
             return menu
           }, [])
