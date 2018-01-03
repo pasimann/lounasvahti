@@ -44,7 +44,7 @@ export class SlackClient extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.rtmClient.start()
       this.rtmClient.on(RTM_EVENTS.MESSAGE, (message) => {
-        if (message.user !== this.id) {
+        if (this.shouldReplyToMessage(message)) {
           this.emit(SlackClient.MESSAGE, new SlackMessage(this.rtmClient, message))
         }
       })
@@ -68,5 +68,12 @@ export class SlackClient extends EventEmitter {
         return resolve()
       })
     })
+  }
+
+  private shouldReplyToMessage (message): boolean {
+    return (
+      message.text &&
+      message.user !== this.id &&
+      message.text.includes(`<@${this.id.toUpperCase()}>`))
   }
 }

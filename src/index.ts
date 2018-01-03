@@ -39,7 +39,8 @@ slack.initialize()
         if (RE_TOMORROW.test(message.content)) {
           date.setDate(date.getDate() + 1)
         }
-        Promise.all(places.map(p => display(date, p)))
+        const mentioned = places.filter(place => place.name.test(message.content))
+        Promise.all((mentioned.length > 0 ? mentioned : places).map(p => display(date, p)))
           .catch(err => log.error(err.message, err.stack))
       }
     })

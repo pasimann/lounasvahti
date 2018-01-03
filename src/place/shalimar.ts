@@ -8,7 +8,9 @@ import { Place } from 'lounasvahti/place'
 import { getFinnishDayName } from 'lounasvahti/utils'
 
 export class Shalimar extends Place {
+  public name: RegExp = /shalimar/i
   public header: string = 'Shalimar tarjoaa:'
+
   private url: string = 'http://www.ravintolashalimar.fi/index.php?page=lounasjkl'
 
   public menu (date: Date): Promise<string[]> {
