@@ -59,6 +59,8 @@ function onCronTick (date: Date): void {
 
 function display (date: Date, place: Place): Promise<void> {
   return place.menu(date).then((menu: string[]) => {
-    return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`)
+    if (menu.length > 0) {
+      return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`)
+    }
   })
 }
