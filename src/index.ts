@@ -8,6 +8,7 @@ import { createCronJob, CronJob } from 'lounasvahti/cron'
 import { SlackClient, SlackClientOptions, SlackMessage } from 'lounasvahti/slack'
 
 import { Place } from 'lounasvahti/place'
+import { Wanha } from 'lounasvahti/place/wanha'
 import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
 
@@ -25,6 +26,7 @@ const RE_SHOULD_REPLY = /(louna(s|ana|aksi)|ruo(ka|aksi|kana))/i
 const slack = new SlackClient(SLACK_CLIENT_OPTIONS)
 
 const places: Place[] = [
+  new Wanha(),
   new Sodexo(),
   new Shalimar()
 ]
