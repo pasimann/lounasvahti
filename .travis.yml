@@ -1,10 +1,8 @@
 sudo: required
 language: node_js
-node_js:
-  - "8"
 services:
   - docker
-after_install:
+before_install:
   - docker --version
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
