@@ -11,6 +11,7 @@ import { Place } from 'lounasvahti/place'
 import { Wanha } from 'lounasvahti/place/wanha'
 import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
+import { Trattoria } from 'lounasvahti/place/trattoria'
 
 const CRON_PATTERN = '30 7 * * 1-5'
 
@@ -28,7 +29,8 @@ const slack = new SlackClient(SLACK_CLIENT_OPTIONS)
 const places: Place[] = [
   new Wanha(),
   new Sodexo(),
-  new Shalimar()
+  new Shalimar(),
+  new Trattoria()
 ]
 
 slack.initialize()
