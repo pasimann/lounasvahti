@@ -1,3 +1,12 @@
+sudo: required
 language: node_js
-node_js:
-  - "8"
+before_install:
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - docker --version
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
+  - docker build -t lounasvahti .
+  - docker tag lounsvahti:latest $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
+  - docker push $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
