@@ -5,7 +5,7 @@ import { Place } from 'lounasvahti/place'
 
 export class Sodexo extends Place {
   public name: RegExp = /(sodexo|alaker(ta|rassa))/
-  public header: string = 'Valtakunnanjohtaja Siitoin suosittelee:'
+  public header: string = 'Sodexossa:'
 
   private url: string = 'https://www.sodexo.fi/ruokalistat/output/daily_json/66'
 
