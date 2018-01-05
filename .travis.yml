@@ -12,4 +12,4 @@ after_success:
   - docker build -t lounasvahti .
   - docker tag lounasvahti:latest $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
   - docker push $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
-  - aws ecs update-service --service lounasvahti --task-definition lounasvahti
+  - aws ecs update-service --cluster lounasvahti --service lounasvahti --task-definition lounasvahti --region $AWS_REGION
