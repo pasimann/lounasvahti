@@ -9,7 +9,7 @@ import { getFinnishDayName } from 'lounasvahti/utils'
 
 export class Trattoria extends Place {
   public name: RegExp = /trattoria/i
-  public header: string = 'Trattoriassa'
+  public header: string = 'Trattoriassa:'
 
   private url: string = 'https://www.raflaamo.fi/fi/jyvaskyla/trattoria-aukio-jyvaskyla/menu'
 
