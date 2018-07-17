@@ -11,34 +11,29 @@ export class Shalimar extends Place {
   public name: RegExp = /shalimar/i
   public header: string = 'Shalimar tarjoaa:'
 
-  private url: string = 'http://www.ravintolashalimar.fi/index.php?page=lounasjkl'
+  private url: string = 'http://www.ravintolashalimar.fi'
 
   public menu (date: Date): Promise<string[]> {
-    if (getFinnishDayName(date)) {
-      const bounds: (string | undefined)[] = [
-        getFinnishDayName(date),
-        getFinnishDayName(moment(date).add(1, 'day').toDate())
-      ]
+      const pv: (string | undefined) = getFinnishDayName(date)
+      const vk: number = moment(date).week() % 4 === 0 ? 4 : moment(date).week() % 4
+      console.log(vk)
+      const d = moment(date).format('dddd').toLocaleLowerCase()
       return Promise.resolve(axios.get(this.url)).then((response) => {
         const $: CheerioStatic = load(response.data)
-        // First we find the weekday that we're currently taking a look at and then we take until
-        // we encounter another week day.
-        return Promise.resolve(_.chain($('table tr').toArray())
-          .dropWhile(el => !$(el).find('td').text().toLowerCase().includes(bounds[0] as string))
-          .takeWhile(el => !$(el).find('td').text().toLowerCase().includes(bounds[1] as string))
-          .tail()
-          .filter(el => $(el).find('td').text().trim().length > 0)
+        // We find the weekday of the right week that we're currently taking a look at.
+        // For monday and tuesday of week 1, there is no weeknumber, so we have to account for that. :)
+        return Promise.resolve(_
+          .chain($(`.fdm-section-${pv}, .fdm-section-${pv}-${vk}`).last().find('.fdm-item'))
           .reduce((menu: string[], el: CheerioElement) => {
-            if ($(el).find('td').hasClass('dish')) {
-              const dish = $(el).find('td').first().text()
-              const desc = $(el).next().find('td.desc').text()
+            console.log($(el))
+            if ($(el).find('div').hasClass('fdm-item-panel')) {
+              const dish = $(el).find('.fdm-item-title').text()
+              const desc = $(el).find('.fdm-item-content > p').text()
               return menu.concat(`${dish} - ${desc}`)
             }
             return menu
           }, [])
           .value())
       })
-    }
-    return Promise.resolve([])
   }
 }
