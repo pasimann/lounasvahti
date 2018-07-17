@@ -33,6 +33,5 @@ export class Shalimar extends Place {
           }, [])
           .value())
       })
-      return Promise.resolve([])
   }
 }
