@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 import * as _ from 'lodash'
-import * as moment from 'moment'
 
 import { load } from 'cheerio'
 import { Place } from 'lounasvahti/place'
