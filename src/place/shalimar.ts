@@ -16,7 +16,6 @@ export class Shalimar extends Place {
   public menu (date: Date): Promise<string[]> {
       const pv: (string | undefined) = getFinnishDayName(date)
       const vk: number = moment(date).week() % 4 === 0 ? 4 : moment(date).week() % 4
-      console.log(vk)
       const d = moment(date).format('dddd').toLocaleLowerCase()
       return Promise.resolve(axios.get(this.url)).then((response) => {
         const $: CheerioStatic = load(response.data)
@@ -25,7 +24,6 @@ export class Shalimar extends Place {
         return Promise.resolve(_
           .chain($(`.fdm-section-${pv as string}, .fdm-section-${pv as string}-${vk}`).last().find('.fdm-item'))
           .reduce((menu: string[], el: CheerioElement) => {
-            console.log($(el))
             if ($(el).find('div').hasClass('fdm-item-panel')) {
               const dish = $(el).find('.fdm-item-title').text()
               const desc = $(el).find('.fdm-item-content > p').text()
@@ -35,5 +33,6 @@ export class Shalimar extends Place {
           }, [])
           .value())
       })
+      return Promise.resolve([])
   }
 }
