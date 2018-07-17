@@ -23,7 +23,7 @@ export class Shalimar extends Place {
         // We find the weekday of the right week that we're currently taking a look at.
         // For monday and tuesday of week 1, there is no weeknumber, so we have to account for that. :)
         return Promise.resolve(_
-          .chain($(`.fdm-section-${pv}, .fdm-section-${pv}-${vk}`).last().find('.fdm-item'))
+          .chain($(`.fdm-section-${pv as string}, .fdm-section-${pv as string}-${vk}`).last().find('.fdm-item'))
           .reduce((menu: string[], el: CheerioElement) => {
             console.log($(el))
             if ($(el).find('div').hasClass('fdm-item-panel')) {
