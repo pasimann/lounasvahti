@@ -4,6 +4,9 @@ node_js:
   - "8"
 services:
   - docker
+cache:
+  directories:
+    - $HOME/.npm
 script:
   - docker build -t lounasvahti .
 deploy:
