@@ -6,12 +6,11 @@ services:
   - docker
 script:
   - docker build -t lounasvahti .
-before_deploy:
+after_success:
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
   - eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
   - aws configure set default.region $AWS_REGION
-deploy:
   - docker tag lounasvahti:latest $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
   - docker push $ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest
   - aws ecs register-task-definition --family lounasvahti --cpu "256" --memory "512" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --execution-role-arn ecsTaskExecutionRole --container-definitions "{\"image\":\"$ECR_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/lounasvahti:latest\",\"name\":\"lounasvahti\",\"environment\":[{\"name\":\"SLACK_API_TOKEN\",\"value\":\"$SLACK_API_TOKEN\"},{\"name\":\"SLACK_CHANNEL\",\"value\":\"$SLACK_CHANNEL\"},{\"name\":\"SLACK_USER\",\"value\":\"$SLACK_USER\"}]}"
