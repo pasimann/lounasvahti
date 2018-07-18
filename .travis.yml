@@ -4,6 +4,9 @@ node_js:
   - "8"
 services:
   - docker
+stages:
+  - name: after_success
+    if: branch = master
 script:
   - docker build -t lounasvahti .
 after_success:
