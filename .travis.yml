@@ -4,12 +4,10 @@ node_js:
   - "8"
 services:
   - docker
-stages:
-  - name: after_success
-    if: branch = master
 script:
   - docker build -t lounasvahti .
 after_success:
+  - test $TRAVIS_BRANCH = "master"
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
   - eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
