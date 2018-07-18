@@ -4,8 +4,9 @@ node_js:
   - "8"
 services:
   - docker
-install:
+script:
   - docker build -t lounasvahti .
+after_success:
   - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
   - eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
