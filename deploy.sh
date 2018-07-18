@@ -1,5 +1,4 @@
 #!/bin/bash
-
 pip install --user awscli
 export PATH=$PATH:$HOME/.local/bin
 eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
