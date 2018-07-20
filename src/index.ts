@@ -13,7 +13,7 @@ import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
 import { Trattoria } from 'lounasvahti/place/trattoria'
 
-const CRON_PATTERN = '30 6 * * 1-5'
+const CRON_PATTERN = '30 8 * * 1-5'
 
 const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
   user: process.env.SLACK_USER || '',

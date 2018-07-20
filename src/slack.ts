@@ -61,7 +61,7 @@ export class SlackClient extends EventEmitter {
       const options = {
         as_user: this.options.user ? true : false
       }
-      this.webClient.chat.postMessage({channel: this.options.channel, text: message, ...options}, (err) => {
+      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, ...options }, (err) => {
         if (err) {
           return reject(err)
         }
