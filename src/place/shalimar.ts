@@ -9,7 +9,7 @@ import { getFinnishDayName } from 'lounasvahti/utils'
 
 export class Shalimar extends Place {
   public name: RegExp = /shalimar/i
-  public header: string = 'Shalimar tarjoaa:'
+  public header: string = 'Shalimarissa:'
 
   private url: string = 'http://www.ravintolashalimar.fi'
 
