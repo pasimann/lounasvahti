@@ -16,9 +16,9 @@ import { Trattoria } from 'lounasvahti/place/trattoria'
 const CRON_PATTERN = '30 6 * * 1-5'
 
 const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
-  user: process.env.SLACK_USER,
-  channel: process.env.SLACK_CHANNEL,
-  token: process.env.SLACK_API_TOKEN
+  user: process.env.SLACK_USER || '',
+  channel: process.env.SLACK_CHANNEL || '',
+  token: process.env.SLACK_API_TOKEN || ''
 }
 
 const RE_TOMORROW = /huomen/i

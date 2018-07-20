@@ -7,7 +7,7 @@ import { Place } from 'lounasvahti/place'
 import { getFinnishDayName } from 'lounasvahti/utils'
 
 export class Wanha extends Place {
-  public name: RegExp = /(wanha|asema)/i
+  public name: RegExp = /((w|v)anha|asema)/i
   public header: string = 'Wanhassa Asemaravintolassa:'
 
   private url: string = 'http://vanhaasemaravintola.fi/lounaslista/'
