@@ -13,6 +13,8 @@ import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
 import { Trattoria } from 'lounasvahti/place/trattoria'
 
+
+
 const CRON_PATTERN = '*/3 * * * 1-5'
 const CRON_PATTERN_DAILY_LISTS = '* * * * *'
 
@@ -29,9 +31,9 @@ const slack = new SlackClient(SLACK_CLIENT_OPTIONS)
 
 const places: Place[] = [
   new Wanha(),
-  //new Sodexo(),
-  //new Shalimar(),
-  //new Trattoria()
+  new Sodexo(),
+  new Shalimar(),
+  new Trattoria()
 ]
 
 slack.initialize()
@@ -57,14 +59,15 @@ slack.initialize()
     process.exit(1)
   })
 
-function onCronTickLunchList (date: Date): void {
+function onCronTickLunchList (date: Date, context: CronJob): void {
   console.log('listing lunches')
+  console.log(this)
   Promise.all(places.map(p => display(date, p)))
     .catch((err: Error) => log.error(err.message, err.stack))
-    this.stop()
+    context.stop()
 }
 
-function onCronTickCheck (date: Date): void {
+function onCronTickCheck (date: Date, context?: CronJob): void {
   console.log('create lunch cron')
   createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickLunchList })
 }
