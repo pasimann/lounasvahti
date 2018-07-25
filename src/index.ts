@@ -49,7 +49,7 @@ slack.initialize()
     })
   })
   .then(() => {
-    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCheck, runOnInit: true })
+    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCheck })
   })
   .catch((err: Error) => {
     log.error(err.message, err.stack)
