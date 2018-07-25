@@ -49,7 +49,7 @@ slack.initialize()
     })
   })
   .then(() => {
-    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCheck })
+    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCreateLunchCheck })
   })
   .catch((err: Error) => {
     log.error(err.message, err.stack)
@@ -62,7 +62,7 @@ function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
   context.stop()
 }
 
-function onCronTickCheck (date: Date, context?: CronJob): void {
+function onCronTickCreateLunchCheck (date: Date, context?: CronJob): void {
   createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickOneOffLunchList })
   .catch(err => log.error(err.message, err.stack))
 }
