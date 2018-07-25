@@ -56,14 +56,14 @@ slack.initialize()
     process.exit(1)
   })
 
-function onCronTickLunchList (date: Date, context: CronJob): void {
+function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
   Promise.all(places.map(p => display(date, p)))
     .catch((err: Error) => log.error(err.message, err.stack))
   context.stop()
 }
 
 function onCronTickCheck (date: Date, context?: CronJob): void {
-  createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickLunchList })
+  createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickOneOffLunchList })
   .catch(err => log.error(err.message, err.stack))
 }
 
