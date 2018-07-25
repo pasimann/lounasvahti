@@ -4,17 +4,17 @@ import * as moment from 'moment-timezone'
 export type CronJob = CronJob
 export type CronTickHandler = (Date, CronJob) => void
 
-let tmp
-
-export function createCronJob (params: { pattern: string, onTick: CronTickHandler}): Promise<CronJob> {
+export function createCronJob (params: { pattern: string, onTick: CronTickHandler, timeZone?: string, runOnInit?: boolean}): Promise<CronJob> {
   return new Promise((resolve, reject) => {
     try {
       return resolve(new CronJob({
         cronTime: params.pattern,
-        //TODO: Timezone as a parameter
-        onTick: function() { return params.onTick(moment.tz('Europe/Helsinki'), this)},
+        onTick: function () {
+          return params.onTick(moment.tz(params.timeZone || 'Europe/Helsinki'), this)
+        },
         start: true,
-        timeZone: 'Europe/Helsinki',
+        timeZone: params.timeZone || 'Europe/Helsinki',
+        runOnInit: params.runOnInit || false
       }))
     } catch (err) {
       return reject(err)
