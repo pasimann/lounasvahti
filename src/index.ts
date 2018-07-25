@@ -13,7 +13,8 @@ import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
 import { Trattoria } from 'lounasvahti/place/trattoria'
 
-const CRON_PATTERN = '30 8 * * 1-5'
+const CRON_PATTERN = '* 4 * * 1-5'
+const CRON_PATTERN_DAILY_LISTS = '30 8 * * 1-5'
 
 const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
   user: process.env.SLACK_USER || '',
@@ -48,16 +49,22 @@ slack.initialize()
     })
   })
   .then(() => {
-    return createCronJob(CRON_PATTERN, onCronTick).then((cron: CronJob) => cron.start())
+    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCreateLunchCheck })
   })
   .catch((err: Error) => {
     log.error(err.message, err.stack)
     process.exit(1)
   })
 
-function onCronTick (date: Date): void {
+function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
   Promise.all(places.map(p => display(date, p)))
     .catch((err: Error) => log.error(err.message, err.stack))
+  context.stop()
+}
+
+function onCronTickCreateLunchCheck (date: Date, context?: CronJob): void {
+  createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickOneOffLunchList })
+  .catch(err => log.error(err.message, err.stack))
 }
 
 function display (date: Date, place: Place): Promise<void> {
