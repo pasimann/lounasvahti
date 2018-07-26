@@ -13,7 +13,7 @@ import { Sodexo } from 'lounasvahti/place/sodexo'
 import { Shalimar } from 'lounasvahti/place/shalimar'
 import { Trattoria } from 'lounasvahti/place/trattoria'
 
-const CRON_PATTERN = '* 4 * * 1-5'
+const CRON_PATTERN = '0 4 * * 1-5'
 const CRON_PATTERN_DAILY_LISTS = '30 8 * * 1-5'
 
 const SLACK_CLIENT_OPTIONS: SlackClientOptions = {
