@@ -74,6 +74,7 @@ export class SlackClient extends EventEmitter {
     return (
       message.text &&
       message.user !== this.id &&
+      message.channel === this.options.channel &&
       message.text.includes(`<@${this.id.toUpperCase()}>`))
   }
 }
