@@ -5,7 +5,7 @@ import 'dotenv/config'
 import * as log from 'winston'
 
 import { createCronJob, CronJob } from 'lounasvahti/cron'
-import { SlackClient, SlackClientOptions, SlackMessage } from 'lounasvahti/slack'
+import { SlackClient, SlackClientOptions, SlackMessage, SlackAPICallResult } from 'lounasvahti/slack'
 
 import { Place } from 'lounasvahti/place'
 import { Wanha } from 'lounasvahti/place/wanha'
@@ -57,8 +57,9 @@ slack.initialize()
   })
 
 function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
-  Promise.all(places.map(p => display(date, p)))
-    .catch((err: Error) => log.error(err.message, err.stack))
+  threadStart().then(thread =>
+  Promise.all(places.map(p => display(date, p, thread.ts)))
+    .catch((err: Error) => log.error(err.message, err.stack)))
   context.stop()
 }
 
@@ -67,10 +68,14 @@ function onCronTickCreateLunchCheck (date: Date, context?: CronJob): void {
   .catch(err => log.error(err.message, err.stack))
 }
 
-function display (date: Date, place: Place, thread?: string): Promise<void> {
-  return place.menu(date).then((menu: string[]) => {
+function threadStart (): Promise<SlackAPICallResult> {
+  return slack.post('Ohessa päivän lounaat')
+}
+
+function display (date: Date, place: Place, thread?: string): Promise<SlackAPICallResult> {
+  return new Promise((resolve, reject) => place.menu(date).then((menu: string[]) => {
     if (menu.length > 0) {
-      return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`, thread)
-    }
-  })
+      resolve(slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`, thread))
+    } else reject()
+  }))
 }

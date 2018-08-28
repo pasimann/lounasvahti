@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { WebClient, RTMClient, RTMCallResult } from '@slack/client'
+import { WebClient, RTMClient, RTMCallResult, WebAPICallResult } from '@slack/client'
 
 export type SlackClientOptions = {
   user: string
@@ -24,6 +24,10 @@ export class SlackMessage {
   public reply (message: string): Promise<RTMCallResult> {
     return this.client.sendMessage(message, this.channel)
   }
+}
+
+export interface SlackAPICallResult extends WebAPICallResult {
+  ts?: string
 }
 
 export class SlackClient extends EventEmitter {
@@ -58,16 +62,16 @@ export class SlackClient extends EventEmitter {
     })
   }
 
-  public post (message: string, thread?: string): Promise<void> {
+  public post (message: string, thread?: string): Promise<SlackAPICallResult> {
     return new Promise((resolve, reject) => {
       const options = {
         as_user: this.options.user ? true : false
       }
-      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: thread, ...options }, (err) => {
+      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: thread, ...options }, (err, res) => {
         if (err) {
           return reject(err)
         }
-        return resolve()
+        return resolve(res)
       })
     })
   }
