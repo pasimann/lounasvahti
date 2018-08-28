@@ -26,7 +26,7 @@ export class SlackMessage {
   }
 }
 
-export interface SlackAPICallResult extends WebAPICallResult {
+export interface IMessage extends WebAPICallResult {
   ts?: string
 }
 
@@ -62,18 +62,11 @@ export class SlackClient extends EventEmitter {
     })
   }
 
-  public post (message: string, thread?: string): Promise<SlackAPICallResult> {
-    return new Promise((resolve, reject) => {
-      const options = {
-        as_user: this.options.user ? true : false
-      }
-      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: thread, ...options }, (err, res) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve(res)
-      })
-    })
+  public async post (message: string, ts?: string): Promise<IMessage> {
+    const options = {
+      as_user: this.options.user ? true : false
+    }
+    return this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: ts, ...options })
   }
 
   private shouldReplyToMessage (message): boolean {
