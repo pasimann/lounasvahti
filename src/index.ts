@@ -43,7 +43,7 @@ slack.initialize()
           date.setDate(date.getDate() + 1)
         }
         const mentioned = places.filter(place => place.name.test(message.content))
-        Promise.all((mentioned.length > 0 ? mentioned : places).map(p => display(date, p)))
+        Promise.all((mentioned.length > 0 ? mentioned : places).map(p => display(date, p, message.ts)))
           .catch(err => log.error(err.message, err.stack))
       }
     })
@@ -67,10 +67,10 @@ function onCronTickCreateLunchCheck (date: Date, context?: CronJob): void {
   .catch(err => log.error(err.message, err.stack))
 }
 
-function display (date: Date, place: Place): Promise<void> {
+function display (date: Date, place: Place, thread?: string): Promise<void> {
   return place.menu(date).then((menu: string[]) => {
     if (menu.length > 0) {
-      return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`)
+      return slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`, thread)
     }
   })
 }

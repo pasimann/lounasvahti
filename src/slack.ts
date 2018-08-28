@@ -10,6 +10,7 @@ export type SlackClientOptions = {
 export class SlackMessage {
   public readonly channel: string
   public readonly content: string
+  public readonly ts: string
 
   private client: RTMClient
 
@@ -17,6 +18,7 @@ export class SlackMessage {
     this.client = client
     this.content = message.text
     this.channel = message.channel
+    this.ts = message.ts
   }
 
   public reply (message: string): Promise<RTMCallResult> {
@@ -56,12 +58,12 @@ export class SlackClient extends EventEmitter {
     })
   }
 
-  public post (message: string): Promise<void> {
+  public post (message: string, thread?: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const options = {
         as_user: this.options.user ? true : false
       }
-      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, ...options }, (err) => {
+      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: thread, ...options }, (err) => {
         if (err) {
           return reject(err)
         }
