@@ -57,7 +57,8 @@ slack.initialize()
   })
 
 function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
-  slack.post(`Ohessa päivän ${new Date()} lounaat`)
+  const today = new Date()
+  slack.post(`Päivän ${today.getDate()}.${today.getMonth() + 1}. lounaat`)
   .then((thread: SlackAPICallResult) => Promise.all(places.map((p: Place) => display(date, p, thread.ts)))
     .catch((err: Error) => log.error(err.message, err.stack)))
   context.stop()
