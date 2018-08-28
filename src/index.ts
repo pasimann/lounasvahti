@@ -43,8 +43,8 @@ slack.initialize()
           date.setDate(date.getDate() + 1)
         }
         const mentioned = places.filter(place => place.name.test(message.content))
-        Promise.all((mentioned.length > 0 ? mentioned : places).map(p => display(date, p, message.ts)))
-          .catch(err => log.error(err.message, err.stack))
+        Promise.all((mentioned.length > 0 ? mentioned : places).map((p: Place) => display(date, p, message.ts)))
+          .catch((err: Error) => log.error(err.message, err.stack))
       }
     })
   })
@@ -57,25 +57,21 @@ slack.initialize()
   })
 
 function onCronTickOneOffLunchList (date: Date, context: CronJob): void {
-  threadStart().then(thread =>
-  Promise.all(places.map(p => display(date, p, thread.ts)))
+  slack.post(`Ohessa päivän ${new Date()} lounaat`)
+  .then((thread: SlackAPICallResult) => Promise.all(places.map((p: Place) => display(date, p, thread.ts)))
     .catch((err: Error) => log.error(err.message, err.stack)))
   context.stop()
 }
 
 function onCronTickCreateLunchCheck (date: Date, context?: CronJob): void {
   createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickOneOffLunchList })
-  .catch(err => log.error(err.message, err.stack))
-}
-
-function threadStart (): Promise<SlackAPICallResult> {
-  return slack.post('Ohessa päivän lounaat')
+  .catch((err: Error) => log.error(err.message, err.stack))
 }
 
 function display (date: Date, place: Place, thread?: string): Promise<SlackAPICallResult> {
   return new Promise((resolve, reject) => place.menu(date).then((menu: string[]) => {
     if (menu.length > 0) {
       resolve(slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`, thread))
-    } else reject()
+    } else reject('No menu to display')
   }))
 }
