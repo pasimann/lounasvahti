@@ -26,7 +26,13 @@ export class SlackMessage {
   }
 }
 
-export interface IMessage extends WebAPICallResult {
+export interface IMessage {
+  ts: string
+}
+
+export interface IWebAPICallResult extends WebAPICallResult {
+  // We know that the WebAPICallResult will always include a "ts" property, even though it is not
+  // declared. However we must mark it optional here to prevent type errors.
   ts?: string
 }
 
@@ -66,7 +72,8 @@ export class SlackClient extends EventEmitter {
     const options = {
       as_user: this.options.user ? true : false
     }
-    return this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: ts, ...options })
+    const response: IWebAPICallResult = await this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: ts, ...options })
+    return { ts: response.ts! }
   }
 
   private shouldReplyToMessage (message): boolean {

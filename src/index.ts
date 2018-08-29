@@ -4,7 +4,7 @@ import 'dotenv/config'
 
 import * as log from 'winston'
 
-import { createCronJob, CronJob, CronDate } from 'lounasvahti/cron'
+import { createCronJob, CronJob, CronDate, ICronJobParams } from 'lounasvahti/cron'
 import { SlackClient, SlackClientOptions, SlackMessage, IMessage } from 'lounasvahti/slack'
 
 import { Place } from 'lounasvahti/place'
@@ -43,13 +43,17 @@ slack.initialize()
           date.setDate(date.getDate() + 1)
         }
         const mentioned = places.filter(place => place.name.test(message.content))
-        Promise.all((mentioned.length > 0 ? mentioned : places).map((p: Place) => displayLunchLists(date, p, message.ts)))
+        Promise.all((mentioned.length > 0 ? mentioned : places).map((p: Place) => displayLunchList(p, date, message.ts)))
           .catch((err: Error) => log.error(err.message, err.stack))
       }
     })
   })
   .then(() => {
-    return createCronJob({ pattern: CRON_PATTERN, onTick: onCronTickCreateLunchCheck })
+    const createLunchCheck: ICronJobParams = {
+      pattern: CRON_PATTERN,
+      onTick: onCronTickCreateLunchCheck
+    }
+    return createCronJob(createLunchCheck)
   })
   .catch((err: Error) => {
     log.error(err.message, err.stack)
@@ -59,7 +63,7 @@ slack.initialize()
 async function onCronTickOneOffLunchList (date: CronDate, context: CronJob): Promise<void> {
   try {
     const message = await slack.post(`Päivän ${date.date()}.${date.month() + 1}. lounaat`)
-    Promise.all(places.map((p: Place) => displayLunchLists(date, p, message.ts)))
+    await Promise.all(places.map((p: Place) => displayLunchList(p, date, message.ts)))
   } catch (err) {
     log.error(err)
   }
@@ -67,11 +71,15 @@ async function onCronTickOneOffLunchList (date: CronDate, context: CronJob): Pro
 }
 
 function onCronTickCreateLunchCheck (date: CronDate, context?: CronJob): void {
-  createCronJob({ pattern: CRON_PATTERN_DAILY_LISTS, onTick: onCronTickOneOffLunchList })
+  const lunchLists: ICronJobParams = {
+    pattern: CRON_PATTERN_DAILY_LISTS,
+    onTick: onCronTickOneOffLunchList
+  }
+  createCronJob(lunchLists)
   .catch((err: Error) => log.error(err.message, err.stack))
 }
 
-async function displayLunchLists (date: Date, place: Place, ts?: string): Promise<void> {
+async function displayLunchList (place: Place, date: Date, ts?: string): Promise<void> {
   const menu = await place.menu(date)
   if (menu.length > 0) {
     slack.post(`${place.header}\n${menu.map(course => `- ${course}`).join('\n')}`, ts)

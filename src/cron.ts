@@ -5,7 +5,15 @@ export type CronJob = CronJob
 export type CronDate = moment.Moment
 export type CronTickHandler = (CronDate, CronJob) => void
 
-export async function createCronJob (params: { pattern: string, onTick: CronTickHandler, start?: boolean, timeZone?: string, runOnInit?: boolean}): Promise<CronJob> {
+export interface ICronJobParams {
+  pattern: string,
+  onTick: CronTickHandler,
+  start?: boolean,
+  timeZone?: string,
+  runOnInit?: boolean
+}
+
+export async function createCronJob (params: ICronJobParams): Promise<CronJob> {
   return new CronJob({
     cronTime: params.pattern,
     onTick: function () {
