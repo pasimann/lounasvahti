@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { WebClient, RTMClient, RTMCallResult } from '@slack/client'
+import { WebClient, RTMClient, RTMCallResult, WebAPICallResult } from '@slack/client'
 
 export type SlackClientOptions = {
   user: string
@@ -10,6 +10,7 @@ export type SlackClientOptions = {
 export class SlackMessage {
   public readonly channel: string
   public readonly content: string
+  public readonly ts: string
 
   private client: RTMClient
 
@@ -17,11 +18,22 @@ export class SlackMessage {
     this.client = client
     this.content = message.text
     this.channel = message.channel
+    this.ts = message.ts
   }
 
   public reply (message: string): Promise<RTMCallResult> {
     return this.client.sendMessage(message, this.channel)
   }
+}
+
+export interface IMessage {
+  ts: string
+}
+
+export interface IWebAPICallResult extends WebAPICallResult {
+  // We know that the WebAPICallResult will always include a "ts" property, even though it is not
+  // declared. However we must mark it optional here to prevent type errors.
+  ts?: string
 }
 
 export class SlackClient extends EventEmitter {
@@ -56,18 +68,12 @@ export class SlackClient extends EventEmitter {
     })
   }
 
-  public post (message: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const options = {
-        as_user: this.options.user ? true : false
-      }
-      this.webClient.chat.postMessage({ channel: this.options.channel, text: message, ...options }, (err) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve()
-      })
-    })
+  public async post (message: string, ts?: string): Promise<IMessage> {
+    const options = {
+      as_user: this.options.user ? true : false
+    }
+    const response: IWebAPICallResult = await this.webClient.chat.postMessage({ channel: this.options.channel, text: message, thread_ts: ts, ...options })
+    return { ts: response.ts! }
   }
 
   private shouldReplyToMessage (message): boolean {
